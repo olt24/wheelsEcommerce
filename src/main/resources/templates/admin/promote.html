@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Admin Panel</title>
+</head>
+<body>
+<h1>Admin Panel</h1>
+<form th:action="@{/admin/promote}" method="post">
+  <label for="userId">User ID to Promote:</label>
+  <input type="number" id="userId" name="userId" required />
+  <br />
+  <button type="submit">Promote to Admin</button>
+</form>
+<a href="/">Back to Home</a>
+</body>
+</html>
