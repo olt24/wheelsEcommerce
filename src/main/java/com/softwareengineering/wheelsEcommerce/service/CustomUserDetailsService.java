@@ -1,5 +1,6 @@
 package com.softwareengineering.wheelsEcommerce.service;
 
+
 import com.softwareengineering.wheelsEcommerce.model.User;
 import com.softwareengineering.wheelsEcommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,4 +30,3 @@ public class CustomUserDetailsService implements UserDetailsService {
         );
     }
 }
-

@@ -1,9 +1,8 @@
 package com.softwareengineering.wheelsEcommerce.controller;
 
-import com.softwareengineering.wheelsEcommerce.service.UserService;
+import com.softwareengineering.wheelsEcommerce.model.Product;
+import com.softwareengineering.wheelsEcommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,23 +12,41 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     @Autowired
-    private UserService userService;
+    private ProductService productService;
 
-    @GetMapping("/promote")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String promotePage() {
-        return "admin/promote"; // Returns the promotion page (promote.html)
+    @GetMapping("/dashboard")
+    public String adminDashboard(Model model) {
+        model.addAttribute("products", productService.getAllProducts());
+        return "admin/dashboard";
     }
 
-    @PostMapping("/promote")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String promoteUserToAdmin(@RequestParam Long userId, Model model) {
-        try {
-            userService.promoteToAdmin(userId);
-            model.addAttribute("success", "User promoted to admin successfully!");
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
-        return "admin/promote"; // Return to the promotion page with feedback
+    @GetMapping("/products/new")
+    public String showAddProductForm(Model model) {
+        model.addAttribute("product", new Product());
+        return "admin/add-product";
+    }
+
+    @PostMapping("/products")
+    public String addProduct(@ModelAttribute Product product) {
+        productService.saveProduct(product);
+        return "redirect:/admin/dashboard";
+    }
+
+    @GetMapping("/products/edit/{id}")
+    public String showEditProductForm(@PathVariable Long id, Model model) {
+        model.addAttribute("product", productService.getProductById(id));
+        return "admin/edit-product";
+    }
+
+    @PostMapping("/products/{id}")
+    public String updateProduct(@PathVariable Long id, @ModelAttribute Product product) {
+        productService.updateProduct(id, product);
+        return "redirect:/admin/dashboard";
+    }
+
+    @GetMapping("/products/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return "redirect:/admin/dashboard";
     }
 }

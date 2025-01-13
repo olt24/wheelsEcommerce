@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>All Orders</title>
+</head>
+<body>
+<h1>All Orders</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Order ID</th>
+    <th>User</th>
+    <th>Date</th>
+    <th>Total Amount</th>
+    <th>Address</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="order : ${orders}">
+    <td th:text="${order.id}"></td>
+    <td th:text="${order.user != null ? order.user.username : 'Guest'}"></td>
+    <td th:text="${order.orderDate}"></td>
+    <td th:text="${order.totalAmount}"></td>
+    <td>
+      <span th:text="${order.address.street}"></span>,
+      <span th:text="${order.address.city}"></span>,
+      <span th:text="${order.address.state}"></span>,
+      <span th:text="${order.address.postalCode}"></span>,
+      <span th:text="${order.address.country}"></span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

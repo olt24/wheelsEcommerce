@@ -2,9 +2,13 @@ package com.softwareengineering.wheelsEcommerce.model;
 
 import jakarta.persistence.*;
 
+
+import jakarta.persistence.*;
+
+import java.util.Date;
+
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Product {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +21,20 @@ public abstract class Product {
     @ManyToOne
     private Category category;
 
+    @Enumerated(EnumType.STRING)
+    private ProductType productType; // Enum to distinguish between Tire and Rim
 
+    // Attributes specific to rims
+    private String diameter; // Nullable
+    private String material; // Nullable
+
+    // Attributes specific to tires
+    private String size; // Nullable
+    private String type; // Nullable
+
+    private Date createdDate;
+
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -64,5 +81,45 @@ public abstract class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public String getDiameter() {
+        return diameter;
+    }
+
+    public void setDiameter(String diameter) {
+        this.diameter = diameter;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
