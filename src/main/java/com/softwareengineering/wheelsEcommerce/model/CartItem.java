@@ -1,23 +1,25 @@
 package com.softwareengineering.wheelsEcommerce.model;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "orders")
-public class Order {
+public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private User user;
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    private Double total;
+    private Integer quantity;
+
+    private Double price;
 
     // Getters and setters
 }

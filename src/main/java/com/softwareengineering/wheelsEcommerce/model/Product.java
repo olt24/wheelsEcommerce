@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -32,7 +33,7 @@ public class Product {
     private String size; // Nullable
     private String type; // Nullable
 
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     // Getters and setters
     public Long getId() {

@@ -1,14 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Dashboard</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h1>User Dashboard</h1>
-<p>Welcome to your dashboard!</p>
-<a href="/">Go to Home</a>
+<header>
+  <h1>User Dashboard</h1>
+</header>
+<main>
+  <h2>Welcome, <span th:text="${user.username}"></span></h2>
+  <h3>Your Orders</h3>
+  <ul>
+    <li th:each="order : ${orders}">
+      Order ID: <span th:text="${order.id}"></span>, Total: <span th:text="${order.total}"></span>
+    </li>
+  </ul>
+  <h3>Update Account</h3>
+  <form th:action="@{/user/update}" th:object="${user}" method="post">
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" th:field="*{username}" required>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" th:field="*{email}" required>
+    </div>
+    <div>
+      <button type="submit">Update</button>
+    </div>
+  </form>
+</main>
 </body>
 </html>

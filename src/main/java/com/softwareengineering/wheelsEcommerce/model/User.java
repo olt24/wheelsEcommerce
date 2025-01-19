@@ -23,8 +23,6 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
-    private List<Order> orders;
 
     // Getters and Setters
 
@@ -68,12 +66,7 @@ public class User {
         this.role = role;
     }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
+
 }
 

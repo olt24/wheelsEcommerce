@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Your Orders</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+  <h1>Your Orders</h1>
+</header>
+<main>
+  <ul>
+    <li th:each="order : ${orders}">
+      Order ID: <span th:text="${order.id}"></span>, Total: <span th:text="${order.total}"></span>
+    </li>
+  </ul>
+</main>
+</body>
+</html>
