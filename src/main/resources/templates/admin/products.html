@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Manage Products</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <title>Admin - Products</title>
 </head>
 <body>
-<header>
-    <h1>Manage Products</h1>
-</header>
-<main>
-    <a href="/admin/products/add">Add New Product</a>
-    <ul>
-        <li th:each="product : ${products}">
-            <span th:text="${product.name}"></span> - <span th:text="${product.price}"></span>
+<h1>Products</h1>
+<a th:href="@{/admin/products/add}">Add New Product</a>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.id}">1</td>
+        <td th:text="${product.name}">Product Name</td>
+        <td th:text="${product.description}">Product Description</td>
+        <td th:text="${product.price}">100.00</td>
+        <td th:text="${product.stock}">10</td>
+        <td>
             <a th:href="@{/admin/products/edit/{id}(id=${product.id})}">Edit</a>
-            <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post">
+            <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
                 <button type="submit">Delete</button>
             </form>
-        </li>
-    </ul>
-</main>
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

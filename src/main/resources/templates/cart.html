@@ -1,25 +1,39 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-  <title>Cart</title>
-  <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <title>Cart</title>
 </head>
 <body>
-<header>
-  <h1>Your Cart</h1>
-</header>
-<main>
-  <ul>
-    <li th:each="item : ${cart.cartItems}">
-      <span th:text="${item.product.name}"></span> - <span th:text="${item.quantity}"></span> x <span th:text="${item.price}"></span>
-      <form th:action="@{/cart/remove/{productId}(productId=${item.product.id})}" method="post">
-        <button type="submit">Remove</button>
-      </form>
-    </li>
-  </ul>
-  <form th:action="@{/cart/clear}" method="post">
+<h1>Your Cart</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Subtotal</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${cart.items}">
+        <td th:text="${item.product.name}"></td>
+        <td th:text="${item.quantity}"></td>
+        <td th:text="${item.product.price}"></td>
+        <td th:text="${item.subtotal}"></td>
+        <td>
+            <form th:action="@{/cart/remove/{id}(id=${item.product.id})}" method="post">
+                <button type="submit">Remove</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Total: <span th:text="${cart.total}"></span></p>
+<form th:action="@{/cart/clear}" method="post">
     <button type="submit">Clear Cart</button>
-  </form>
-</main>
+</form>
+<a th:href="@{/cart/checkout}">Proceed to Checkout</a>
 </body>
 </html>

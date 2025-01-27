@@ -2,6 +2,8 @@ package com.softwareengineering.wheelsEcommerce.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 public class OrderItem {
 
@@ -10,14 +12,50 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
-    private Order order;
-
-    @ManyToOne
     private Product product;
 
-    private Integer quantity;
+    private int quantity;
+    private double subtotal;
 
-    private Double price;
+    private double price;
 
-    // Getters and setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }

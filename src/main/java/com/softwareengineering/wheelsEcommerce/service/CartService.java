@@ -1,18 +1,17 @@
 package com.softwareengineering.wheelsEcommerce.service;
 
 import com.softwareengineering.wheelsEcommerce.model.Cart;
+import com.softwareengineering.wheelsEcommerce.model.CartItem;
 import com.softwareengineering.wheelsEcommerce.model.Product;
-import com.softwareengineering.wheelsEcommerce.repository.CartRepository;
-import jakarta.servlet.http.HttpSession;
+import com.softwareengineering.wheelsEcommerce.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Service
 public class CartService {
-
-    @Autowired
-    private CartRepository cartRepository;
 
     public Cart getCart(HttpSession session) {
         Cart cart = (Cart) session.getAttribute("cart");
@@ -23,21 +22,44 @@ public class CartService {
         return cart;
     }
 
-    public Cart addProductToCart(HttpSession session, Product product) {
-        Cart cart = getCart(session);
-        cart.addProduct(product);
-        return cartRepository.save(cart);
+    public void addToCart(Cart cart, Long productId, int quantity) {
+        Optional<CartItem> existingItem = cart.getItems().stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst();
+
+        if (existingItem.isPresent()) {
+            CartItem item = existingItem.get();
+            item.setQuantity(item.getQuantity() + quantity);
+        } else {
+            Product product = findProductById(productId); // Implement this method to fetch the product
+            CartItem newItem = new CartItem();
+            newItem.setProduct(product);
+            newItem.setQuantity(quantity);
+            cart.getItems().add(newItem);
+        }
     }
 
-    public Cart removeProductFromCart(HttpSession session, Product product) {
-        Cart cart = getCart(session);
-        cart.removeProduct(product);
-        return cartRepository.save(cart);
+    public void removeFromCart(Cart cart, Long productId) {
+        cart.getItems().removeIf(item -> item.getProduct().getId().equals(productId));
     }
 
-    public void clearCart(HttpSession session) {
-        Cart cart = getCart(session);
-        cart.clear();
-        cartRepository.save(cart);
+    public void clearCart(Cart cart) {
+        cart.getItems().clear();
+    }
+
+    public double getTotal(Cart cart) {
+        return cart.getItems().stream()
+                .mapToDouble(CartItem::getSubtotal)
+                .sum();
+    }
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    // Other methods...
+
+    private Product findProductById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found with ID: " + productId));
     }
 }

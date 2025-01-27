@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -11,28 +13,26 @@
       <li><a href="/">Home</a></li>
       <li><a href="/products">Products</a></li>
       <li><a href="/cart">Cart</a></li>
-      <li><a href="/user/dashboard">Dashboard</a></li>
+      <li>
+                    <span th:if="${username == null}">
+                        <a href="/login">Login</a> | <a href="/register">Register</a>
+                    </span>
+        <span th:if="${username != null}">
+                        Welcome, <span th:text="${username}"></span> | <a href="/logout">Logout</a>
+                    </span>
+      </li>
     </ul>
   </nav>
-  <h1>Welcome to Wheels Ecommerce</h1>
 </header>
 <main>
-  <section>
-    <h2>Featured Products</h2>
-    <div class="product-grid">
-      <div th:each="product : ${featuredProducts}" class="product-item">
-        <h3 th:text="${product.name}"></h3>
-        <p th:text="${product.description}"></p>
-        <p>Price: <span th:text="${product.price}"></span></p>
-        <form th:action="@{/cart/add/{productId}(productId=${product.id})}" method="post">
-          <button type="submit">Add to Cart</button>
-        </form>
-      </div>
-    </div>
+  <section class="hero">
+    <h1>Welcome to Wheels Ecommerce</h1>
+    <p>Your one-stop shop for all your automotive needs.</p>
+    <a href="/products" class="btn">Shop Now</a>
   </section>
 </main>
 <footer>
-  <p>&copy; 2024 Wheels Ecommerce</p>
+  <p>&copy; 2024 Wheels Ecommerce. All rights reserved.</p>
 </footer>
 </body>
 </html>

@@ -5,22 +5,29 @@ import jakarta.persistence.*;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-public class Product {
+public class Product implements  Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String description;
     private double price;
     private String imageUrl;
+    private int stock;
 
-    @ManyToOne
-    private Category category;
+    private String category;
 
     @Enumerated(EnumType.STRING)
     private ProductType productType; // Enum to distinguish between Tire and Rim
@@ -76,11 +83,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
@@ -122,5 +129,31 @@ public class Product {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", stock=" + stock +
+                ", category='" + category + '\'' +
+                ", productType=" + productType +
+                ", diameter='" + diameter + '\'' +
+                ", material='" + material + '\'' +
+                ", size='" + size + '\'' +
+                ", type='" + type + '\'' +
+                ", createdDate=" + createdDate +
+                '}';
     }
 }

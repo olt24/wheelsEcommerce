@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+</head>
+<body>
+<h1>Checkout</h1>
+<form th:action="@{/cart/checkout}" method="post">
+  <div th:if="${user == null}">
+    <h2>Shipping Address</h2>
+    <label for="street">Street:</label>
+    <input type="text" id="street" name="street" required>
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" required>
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state" required>
+    <label for="zip">Zip Code:</label>
+    <input type="text" id="zip" name="zip" required>
+  </div>
+  <h2>Order Summary</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Subtotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${cart.items}">
+      <td th:text="${item.product.name}"></td>
+      <td th:text="${item.quantity}"></td>
+      <td th:text="${item.product.price}"></td>
+      <td th:text="${item.subtotal}"></td>
+    </tr>
+    </tbody>
+  </table>
+  <p>Total: <span th:text="${cart.total}"></span></p>
+  <button type="submit">Place Order</button>
+</form>
+</body>
+</html>

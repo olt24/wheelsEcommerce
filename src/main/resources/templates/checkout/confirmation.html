@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Order Confirmation</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>Order Confirmation</h1>
+<p>Thank you for your purchase!</p>
+<p>Order Date: <span th:text="${order.orderDate}">Order Date</span></p>
+<p>Total: <span th:text="${order.total}">0.00</span></p>
+<h2>Order Items</h2>
+<table border="1">
+  <thead>
+  <tr>
+    <th>Product</th>
+    <th>Quantity</th>
+    <th>Subtotal</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="item : ${order.items}">
+    <td th:text="${item.product.name}">Product Name</td>
+    <td th:text="${item.quantity}">1</td>
+    <td th:text="${item.subtotal}">0.00</td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

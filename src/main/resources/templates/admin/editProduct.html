@@ -1,27 +1,92 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Edit Product</title>
-  <link rel="stylesheet" href="/css/styles.css">
+  <title>Add/Edit Product</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <script>
+    function updateFormFields() {
+      var productType = document.getElementById("productType").value;
+      var rimFields = document.getElementById("rimFields");
+      var tireFields = document.getElementById("tireFields");
+
+      if (productType === "RIM") {
+        rimFields.style.display = "block";
+        tireFields.style.display = "none";
+      } else if (productType === "TIRE") {
+        rimFields.style.display = "none";
+        tireFields.style.display = "block";
+      } else {
+        rimFields.style.display = "none";
+        tireFields.style.display = "none";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      updateFormFields();
+      document.getElementById("productType").addEventListener("change", updateFormFields);
+    });
+  </script>
 </head>
 <body>
-<header>
-  <h1>Edit Product</h1>
-</header>
-<main>
-  <form th:action="@{/admin/products/edit}" th:object="${product}" method="post">
+<div class="container">
+  <h2 th:text="${#strings.equals(action, 'add') ? 'Add Product' : 'Edit Product'}"></h2>
+  <form th:action="@{${action == 'add' ? '/admin/products/add' : '/admin/products/edit'}}" th:object="${product}" method="post">
+    <input type="hidden" th:field="*{id}" />
     <div>
       <label for="name">Name:</label>
       <input type="text" id="name" th:field="*{name}" required>
+    </div>
+    <div>
+      <label for="description">Description:</label>
+      <textarea id="description" th:field="*{description}" required></textarea>
     </div>
     <div>
       <label for="price">Price:</label>
       <input type="text" id="price" th:field="*{price}" required>
     </div>
     <div>
-      <button type="submit">Update Product</button>
+      <label for="imageUrl">Image URL:</label>
+      <input type="text" id="imageUrl" th:field="*{imageUrl}" required>
+    </div>
+    <div>
+      <label for="category">Category:</label>
+      <input type="text" id="category" th:field="*{category}" required>
+    </div>
+    <div>
+      <label for="stock">Stock:</label>
+      <input type="number" id="stock" th:field="*{stock}" required>
+    </div>
+    <div>
+      <label for="productType">Product Type:</label>
+      <select id="productType" th:field="*{productType}">
+        <option value="TIRE">Tire</option>
+        <option value="RIM">Rim</option>
+      </select>
+    </div>
+    <div id="rimFields">
+      <div>
+        <label for="diameter">Diameter:</label>
+        <input type="text" id="diameter" th:field="*{diameter}">
+      </div>
+      <div>
+        <label for="material">Material:</label>
+        <input type="text" id="material" th:field="*{material}">
+      </div>
+    </div>
+    <div id="tireFields">
+      <div>
+        <label for="size">Size:</label>
+        <input type="text" id="size" th:field="*{size}">
+      </div>
+      <div>
+        <label for="type">Type:</label>
+        <input type="text" id="type" th:field="*{type}">
+      </div>
+    </div>
+    <div>
+      <button type="submit">Save</button>
     </div>
   </form>
-</main>
+</div>
 </body>
 </html>

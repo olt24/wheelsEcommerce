@@ -23,6 +23,8 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    private Address address;
+
 
     // Getters and Setters
 
@@ -66,6 +68,13 @@ public class User {
         this.role = role;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
 
 }

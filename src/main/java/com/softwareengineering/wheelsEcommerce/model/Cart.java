@@ -1,41 +1,48 @@
+// src/main/java/com/softwareengineering/wheelsEcommerce/model/Cart.java
 package com.softwareengineering.wheelsEcommerce.model;
 
-import jakarta.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-public class Cart {
+public class Cart implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private Long id;
+    private List<CartItem> items = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private List<CartItem> cartItems;
-
-    // Default constructor
-    public Cart() {}
-
-    // Constructor with User parameter
-    public Cart(User user) {
-        this.user = user;
+    public Long getId() {
+        return id;
     }
 
-    // Getters and setters
-
-    public void addProduct(Product product) {
-        // Add product to cart
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void removeProduct(Product product) {
-        // Remove product from cart
+    public List<CartItem> getItems() {
+        return items;
     }
 
-    public void clear() {
-        // Clear cart
+    public void setItems(List<CartItem> items) {
+        this.items = items;
+    }
+
+    public void addItem(CartItem item) {
+        items.add(item);
+        item.setCart(this);
+    }
+
+    public void removeItem(CartItem item) {
+        items.remove(item);
+        item.setCart(null);
+    }
+
+    public double getTotal() {
+        return items.stream()
+                .mapToDouble(CartItem::getSubtotal)
+                .sum();
     }
 }
