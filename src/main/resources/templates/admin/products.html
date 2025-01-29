@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Admin - Products</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <h1>Products</h1>
@@ -27,6 +28,7 @@
         <td>
             <a th:href="@{/admin/products/edit/{id}(id=${product.id})}">Edit</a>
             <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <button type="submit">Delete</button>
             </form>
         </td>

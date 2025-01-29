@@ -23,6 +23,13 @@ public class CartService {
     }
 
     public void addToCart(Cart cart, Long productId, int quantity) {
+        Product product1 = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product ID not found: " + productId));
+
+        if (quantity > product1.getStock()) {
+            throw new IllegalArgumentException("Requested quantity exceeds available stock");
+        }
+
         Optional<CartItem> existingItem = cart.getItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst();

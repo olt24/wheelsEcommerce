@@ -47,7 +47,8 @@ public class CartController {
     }
 
     @PostMapping("/add/{id}")
-    public String addToCart(@ModelAttribute("cart") Cart cart, @PathVariable Long id, @RequestParam int quantity) {
+    public String addToCart(@ModelAttribute("cart") Cart cart, @PathVariable Long id, @RequestParam int quantity, Model model) {
+
         cartService.addToCart(cart, id, quantity);
         return "redirect:/cart"; // Redirect to the cart view after adding an item
     }
@@ -112,6 +113,7 @@ public class CartController {
             orderItem.setSubtotal(cartItem.getSubtotal());
             orderItem.setPrice(product.getPrice());
             order.getItems().add(orderItem);
+            product.setStock(product.getStock() - orderItem.getQuantity());
         });
 
         orderRepository.save(order);

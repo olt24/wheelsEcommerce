@@ -3,32 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <title>Products</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .filter-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .filter-dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 200px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      padding: 12px 16px;
+      z-index: 1;
+    }
+
+    .filter-dropdown:hover .filter-dropdown-content {
+      display: block;
+    }
+
+    .filter-dropdown-content form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-dropdown-content label, .filter-dropdown-content select {
+      margin-bottom: 10px;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .product-box {
+      border: 1px solid #ccc;
+      padding: 20px;
+      width: calc(33.333% - 40px);
+      box-sizing: border-box;
+    }
+    .product-box img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+  <script>
+    function validateQuantity(input, maxStock) {
+      if (input.value > maxStock) {
+        input.value = maxStock;
+      }
+    }
+  </script>
 </head>
 <body>
-<h1>All Products</h1>
-<table>
-  <thead>
-  <tr>
-    <th>Name</th>
-    <th>Price</th>
-    <th>Description</th>
-    <th>Quantity</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="product : ${products}">
-    <td th:text="${product.name}"></td>
-    <td th:text="${product.price}"></td>
-    <td th:text="${product.description}"></td>
-    <td>
+<header>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/cart">Cart</a></li>
+      <li>
+                <span th:if="${username == null}">
+                    <a href="/login">Login</a> | <a href="/register">Register</a>
+                </span>
+        <span th:if="${username != null}">
+                    Welcome, <span th:text="${username}"></span> | <a href="/logout">Logout</a>
+                </span>
+      </li>
+    </ul>
+  </nav>
+</header>
+<div class="container">
+  <div class="filter-dropdown">
+    <button>Filters</button>
+    <div class="filter-dropdown-content">
+      <form method="get" action="/products">
+        <label for="sort">Sort by:</label>
+        <select id="sort" name="sort">
+          <option value="priceAsc">Price: Low to High</option>
+          <option value="priceDesc">Price: High to Low</option>
+          <option value="nameAsc">Name: A to Z</option>
+          <option value="nameDesc">Name: Z to A</option>
+        </select>
+        <button type="submit">Apply Filters</button>
+      </form>
+    </div>
+  </div>
+  <div class="product-grid">
+    <div class="product-box" th:each="product : ${products}">
+      <img th:src="${product.imageUrl}" alt="Product Image">
+      <h3 th:text="${product.name}"></h3>
+      <p>Price: $<span th:text="${product.price}"></span></p>
+      <p>Stock: <span th:text="${product.stock}"></span></p>
       <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
-        <input type="number" name="quantity" min="1" required>
+        <input type="number" name="quantity" min="1" th:max="${product.stock}" required oninput="validateQuantity(this, [[${product.stock}]])">
         <button type="submit">Add to Cart</button>
       </form>
-    </td>
-  </tr>
-  </tbody>
-</table>
+      <a th:href="@{/product/{id}(id=${product.id})}">Details</a>
+    </div>
+  </div>
+</div>
 </body>
 </html>

@@ -1,16 +1,19 @@
 package com.softwareengineering.wheelsEcommerce.controller;
 
+import com.softwareengineering.wheelsEcommerce.model.Product;
 import com.softwareengineering.wheelsEcommerce.model.User;
+import com.softwareengineering.wheelsEcommerce.repository.ProductRepository;
 import com.softwareengineering.wheelsEcommerce.service.ProductService;
 import com.softwareengineering.wheelsEcommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -21,6 +24,8 @@ public class HomeController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ProductRepository productRepository;
 
 
     @ModelAttribute
@@ -34,14 +39,35 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home() {
+    public String homePage(Model model) {
+        List<Product> latestProducts = productRepository.findTop5ByOrderByCreatedDateDesc();
+        model.addAttribute("latestProducts", latestProducts);
         return "homepage";
     }
 
     @GetMapping("/products")
-    public String products(Model model) {
-        model.addAttribute("products", productService.getAllProducts());
+    public String productPage(@RequestParam(required = false) String sort, Model model) {
+        List<Product> products;
+        if ("priceAsc".equals(sort)) {
+            products = productRepository.findAll(Sort.by(Sort.Direction.ASC, "price"));
+        } else if ("priceDesc".equals(sort)) {
+            products = productRepository.findAll(Sort.by(Sort.Direction.DESC, "price"));
+        } else if ("nameAsc".equals(sort)) {
+            products = productRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        } else if ("nameDesc".equals(sort)) {
+            products = productRepository.findAll(Sort.by(Sort.Direction.DESC, "name"));
+        } else {
+            products = productRepository.findAll();
+        }
+        model.addAttribute("products", products);
         return "products";
+    }
+
+    @GetMapping("/product/{id}")
+    public String productPage(@PathVariable Long id, Model model) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
+        model.addAttribute("product", product);
+        return "product";
     }
 
     @GetMapping("/login")

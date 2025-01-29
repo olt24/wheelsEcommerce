@@ -3,6 +3,7 @@ package com.softwareengineering.wheelsEcommerce.controller;
 import com.softwareengineering.wheelsEcommerce.model.Order;
 import com.softwareengineering.wheelsEcommerce.model.Product;
 import com.softwareengineering.wheelsEcommerce.model.ProductType;
+import com.softwareengineering.wheelsEcommerce.repository.ProductRepository;
 import com.softwareengineering.wheelsEcommerce.service.OrderService;
 import com.softwareengineering.wheelsEcommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class AdminController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private ProductService productService;
@@ -79,7 +83,10 @@ public class AdminController {
 
     @PostMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
+        if (!productRepository.existsById(id)) {
+            throw new IllegalArgumentException("Product ID not found: " + id);
+        }
+        productRepository.deleteById(id);
         return "redirect:/admin/products";
     }
 }

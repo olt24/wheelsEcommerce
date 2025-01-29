@@ -1,38 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
-  <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .product-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: calc(33.333% - 40px);
+            box-sizing: border-box;
+        }
+        .product-box img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
 <header>
-  <nav>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/products">Products</a></li>
-      <li><a href="/cart">Cart</a></li>
-      <li>
-                    <span th:if="${username == null}">
-                        <a href="/login">Login</a> | <a href="/register">Register</a>
-                    </span>
-        <span th:if="${username != null}">
-                        Welcome, <span th:text="${username}"></span> | <a href="/logout">Logout</a>
-                    </span>
-      </li>
-    </ul>
-  </nav>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li>
+                <span th:if="${username == null}">
+                    <a href="/login">Login</a> | <a href="/register">Register</a>
+                </span>
+                <span th:if="${username != null}">
+                    Welcome, <span th:text="${username}"></span> | <a href="/logout">Logout</a>
+                </span>
+            </li>
+        </ul>
+    </nav>
 </header>
 <main>
-  <section class="hero">
-    <h1>Welcome to Wheels Ecommerce</h1>
-    <p>Your one-stop shop for all your automotive needs.</p>
-    <a href="/products" class="btn">Shop Now</a>
-  </section>
+    <section class="hero">
+        <h1>Welcome to Wheels Ecommerce</h1>
+        <p>Your one-stop shop for all your automotive needs.</p>
+        <a href="/products" class="btn">Shop Now</a>
+    </section>
+    <div class="container">
+        <h2>Latest Products</h2>
+        <div class="product-grid">
+            <div class="product-box" th:each="product : ${latestProducts}">
+                <img th:src="${product.imageUrl}" alt="Product Image">
+                <h3 th:text="${product.name}"></h3>
+                <p>Price: $<span th:text="${product.price}"></span></p>
+                <p>Stock: <span th:text="${product.stock}"></span></p>
+                <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                    <input type="number" name="quantity" min="1" th:max="${product.stock}" required>
+                    <button type="submit">Add to Cart</button>
+                </form>
+                <a th:href="@{/product/{id}(id=${product.id})}">Details</a>
+            </div>
+        </div>
+    </div>
 </main>
 <footer>
-  <p>&copy; 2024 Wheels Ecommerce. All rights reserved.</p>
+    <p>&copy; 2024 Wheels Ecommerce. All rights reserved.</p>
 </footer>
 </body>
 </html>
