@@ -1,4 +1,3 @@
-// src/main/java/com/softwareengineering/wheelsEcommerce/service/UserService.java
 package com.softwareengineering.wheelsEcommerce.service;
 
 import com.softwareengineering.wheelsEcommerce.model.Role;
@@ -26,13 +25,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /**
-     * Load user by username for Spring Security.
-     *
-     * @param username the username to search for.
-     * @return UserDetails required by Spring Security.
-     * @throws UsernameNotFoundException if the user is not found.
-     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
@@ -47,12 +39,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-    /**
-     * Registers a new user.
-     *
-     * @param user the user to register.
-     * @throws IllegalArgumentException if the username or email already exists.
-     */
     public void registerUser(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username is already taken.");
@@ -66,46 +52,29 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    /**
-     * Maps roles to Spring Security authorities.
-     *
-     * @param role the role to map.
-     * @return a collection of GrantedAuthority.
-     */
+
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Role role) {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    /**
-     * Retrieves all users (Admin functionality).
-     *
-     * @return a list of all users.
-     */
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    /**
-     * Deletes a user by ID.
-     *
-     * @param id the ID of the user to delete.
-     */
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
 
-
-
-        public User findByUsername(String username) {
+    public User findByUsername(String username) {
             Optional<User> user = userRepository.findByUsername(username);
             return user.orElse(null);
-        }
+    }
 
-        public void updateUser(User user) {
-            userRepository.save(user);
-        }
-
-
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
 
 }
