@@ -5,7 +5,23 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h1>Products</h1>
+<header>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li>
+                <span th:if="${username == null}">
+                    <a href="/login">Login</a> | <a href="/register">Register</a>
+                </span>
+                <span th:if="${username != null}">
+                    Welcome, <span th:text="${username}"></span> | <a href="/logout">Logout</a>
+                </span>
+            </li>
+        </ul>
+    </nav>
+</header>
 <a th:href="@{/admin/products/add}">Add New Product</a>
 <table>
     <thead>

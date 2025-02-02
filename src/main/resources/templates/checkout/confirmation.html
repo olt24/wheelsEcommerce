@@ -5,6 +5,23 @@
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+<header>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/cart">Cart</a></li>
+      <li>
+                <span th:if="${username == null}">
+                    <a href="/login">Login</a> | <a href="/register">Register</a>
+                </span>
+        <span th:if="${username != null}">
+                    Welcome, <span th:text="${username}"></span> | <a href="/logout">Logout</a>
+                </span>
+      </li>
+    </ul>
+  </nav>
+</header>
 <h1>Order Confirmation</h1>
 <p>Thank you for your purchase!</p>
 <p>Order Date: <span th:text="${order.orderDate}">Order Date</span></p>

@@ -6,7 +6,21 @@
 </head>
 <body>
 <header>
-  <h1>User Dashboard</h1>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/cart">Cart</a></li>
+      <li>
+                <span th:if="${username == null}">
+                    <a href="/login">Login</a> | <a href="/register">Register</a>
+                </span>
+        <span th:if="${username != null}">
+                    Welcome, <span th:text="${username}"></span> | <a href="/logout">Logout</a>
+                </span>
+      </li>
+    </ul>
+  </nav>
 </header>
 <main>
   <h2>Welcome, <span th:text="${user.username}"></span></h2>
